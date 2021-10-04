@@ -104,7 +104,8 @@ class AgqrRecorder:
         os.makedirs(schedule.record_dir_path(), exist_ok=True)
         os.makedirs(tmp_dir_path, exist_ok=True)
         tmp_file_path = schedule.tmp_file_path(format)
-        ffmpeg.input(stream_url, t=schedule.length_minutes * 60).output(tmp_file_path, movflags="faststart").overwrite_output().run()
+        # タイムアウトはmicroseconds単位で設定(30秒)
+        ffmpeg.input(stream_url, t=schedule.length_minutes * 60).output(tmp_file_path, movflags="faststart").overwrite_output().global_args('-timeout', '30000000').run()
         
         # ID3タグを埋め込み
         AgqrRecorder.embed_id3_tag(file_path=tmp_file_path, schedule=schedule)
