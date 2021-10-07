@@ -10,9 +10,9 @@ import os
 import pathlib
 import yaml
 import threading
-import ffmpeg
 import shutil
 import pathlib
+import subprocess
 
 data_directory_path: str = "/agqr-recorder-data/"
 config_file_name: str = "config.yaml"
@@ -39,7 +39,7 @@ class Schedule:
 
     def album_name(self) -> str:
         return self.title
-        
+
     def thumb_file_path(self) -> str:
         return data_directory_path + thumb_dir_name + "/" + self.thumb_file_name
 
@@ -96,16 +96,17 @@ class AgqrRecorder:
             if schedule.needs_to_start_recording(now):
                 AgqrRecorder.start_recording(config.stream_url, config.format, schedule)
                 # 複数番組の同時録画は対応しない（ストリームは一つだけなので問題ないはず）
-                return 
+                return
 
     @staticmethod
     def start_recording(stream_url: str, format: str, schedule: Schedule):
         os.makedirs(schedule.record_dir_path(), exist_ok=True)
         os.makedirs(tmp_dir_path, exist_ok=True)
         tmp_file_path = schedule.tmp_file_path(format)
-        # タイムアウトはmicroseconds単位で設定(30秒)
-        ffmpeg.input(stream_url, t=schedule.length_minutes * 60).output(tmp_file_path, movflags="faststart").overwrite_output().global_args('-timeout', '30000000').run()
-        
+        duration_seconds = schedule.length_minutes * 60
+        subprocess.run(f"streamlink --hls-duration 0:0:{str(duration_seconds)} -O {stream_url} best " \
+            + f"| ffmpeg -i pipe:0 -c:v none -c:a libmp3lame -joint_stereo 0 -y -format {format} {tmp_file_path}", shell=True)
+
         # ID3タグを埋め込み
         AgqrRecorder.embed_id3_tag(file_path=tmp_file_path, schedule=schedule)
 
