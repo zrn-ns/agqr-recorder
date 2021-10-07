@@ -66,7 +66,7 @@ class Config:
     path_to_settings_yaml: str = data_directory_path + config_file_name
 
     stream_url: str = ""
-    format: str = ""
+    format: str = "mp3"
     schedules: List[Schedule] = []
 
     def __init__(self):
@@ -76,7 +76,6 @@ class Config:
         with open(self.path_to_settings_yaml) as file:
             config = yaml.safe_load(file)
             self.stream_url = config["agqr_stream_url"]
-            self.format = config["format"]
             self.schedules = []
             for schedule in config["schedules"]:
                 # 時間を0埋めする(8:00 -> 08:00)
