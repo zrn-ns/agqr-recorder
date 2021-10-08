@@ -15,7 +15,8 @@ ENV TZ Asia/Tokyo
 ENV LANG ja_JP.UTF-8
 
 # データディレクトリ
-VOLUME /agqr-recorder-data/
+VOLUME /agqr-recorder-data/config/
+VOLUME /agqr-recorder-data/recorded/
 
 # Install ffmpeg
 RUN apt-get install ffmpeg -y -qq --no-install-recommends

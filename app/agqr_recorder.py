@@ -15,10 +15,11 @@ import pathlib
 import subprocess
 
 data_directory_path: str = "/agqr-recorder-data/"
-config_file_name: str = "config.yaml"
-thumb_dir_name: str = "thumbs"
-record_dir_name: str = "recorded"
-record_root_dir_path: str = data_directory_path + record_dir_name + "/"
+record_root_dir_path: str = data_directory_path + "recorded/"
+
+config_dir_path: str = data_directory_path + "config/"
+path_to_settings_yaml: str = config_dir_path + "config.yaml"
+thumbs_dir_path: str = config_dir_path + "thumbs/"
 
 tmp_dir_path: str = "/tmp/"
 
@@ -41,7 +42,7 @@ class Schedule:
         return self.title
 
     def thumb_file_path(self) -> str:
-        return data_directory_path + thumb_dir_name + "/" + self.thumb_file_name
+        return thumbs_dir_path + self.thumb_file_name
 
     def record_dir_path(self) -> str:
         return record_root_dir_path + self.identifier + "/"
@@ -63,8 +64,6 @@ class Schedule:
         return today_weekday == self.weekday and current_time_str == self.time
 
 class Config:
-    path_to_settings_yaml: str = data_directory_path + config_file_name
-
     stream_url: str = ""
     format: str = "mp3"
     schedules: List[Schedule] = []
@@ -73,7 +72,7 @@ class Config:
         self.load()
 
     def load(self):
-        with open(self.path_to_settings_yaml) as file:
+        with open(path_to_settings_yaml) as file:
             config = yaml.safe_load(file)
             self.stream_url = config["agqr_stream_url"]
             self.schedules = []

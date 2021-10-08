@@ -5,4 +5,9 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ~/agqr-recorder-data/:/agqr-recorder-data/
+      - type: bind
+        source: "~/agqr-recorder-data/config"
+        target: "/agqr-recorder-data/config"
+      - type: bind
+        source: "~/agqr-recorder-data/recorded"
+        target: "/agqr-recorder-data/recorded"
