@@ -17,7 +17,7 @@ $ docker pull zrnns/agqr-recorder
 
 # Dockerイメージを起動する
 # - 先程作成した2つのディレクトリをバインドする
-$ docker run -d -v ~/agqr/config:/agqr-recorder-data/config -v ~/agqr/recorded:/agqr-recorder-data/recorded zrnns/agqr-recorder
+$ docker run -it -v ~/agqr/config:/agqr-recorder-data/config -v ~/agqr/recorded:/agqr-recorder-data/recorded zrnns/agqr-recorder
 
 # configディレクトリに設定ファイルが生成されるので、任意に録音設定を行う(設定の詳細は後述)
 $ vim ~/agqr/config/config.yaml
