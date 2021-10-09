@@ -1,7 +1,6 @@
-# AGQR Recorder
+# agqr-recorder
 
-某ラジオを録画するやつ。
-Dockerでも利用可。
+某ラジオをmp3で録画するやつ。ID3タグの自動埋め込みに対応。
 
 ## 使い方
 
