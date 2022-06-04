@@ -1,8 +1,10 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 MAINTAINER zrn-ns
 
-RUN apt update
+RUN apt-get update
+
+RUN apt-get install ca-certificates -y -qq
 
 # 日本語環境化
 RUN apt-get install -y language-pack-ja-base language-pack-ja locales tzdata; \
@@ -14,30 +16,21 @@ ENV LANG ja_JP.UTF-8
 VOLUME /agqr-recorder-data/config/
 VOLUME /agqr-recorder-data/recorded/
 
-# # https://stackoverflow.com/questions/5178416/libxml-install-error-using-pip
-# RUN apt install libxml2-dev libxslt-dev -y -qq --no-install-recommends
-
 # Install ffmpeg
-RUN apt install ffmpeg -y -qq --no-install-recommends
+RUN apt-get install ffmpeg -y -qq --no-install-recommends
 
-RUN apt install software-properties-common curl -y -qq
-RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt install python3.9 python3-distutils python3-apt -y -qq --no-install-recommends
-RUN curl https://bootstrap.pypa.io/get-pip.py | python3.9 -
-
-RUN python3.9 -V
-RUN pip3 -V
+RUN apt-get install software-properties-common -y -qq
+RUN apt-get install python3 python3-pip python3-distutils -y -qq
 
 # Install streamlink
 RUN pip3 install --upgrade setuptools
-#RUN pip3 install --upgrade libxml2-python3 libxml2-devel libxslt
-#RUN pip3 install --upgrade streamlink
-RUN apt install git -y -qq
-RUN git --version
-RUN pip3 install --upgrade git+https://github.com/streamlink/streamlink.git@ea7a243
+#RUN pip3 install --upgrade libxml2-python3 
+# RUN apt-get install git curl -y -qq
+RUN apt-get install libxml2-dev libxslt-dev python3-dev -y -qq
+RUN pip3 install -v --upgrade streamlink
 
 # Install other tools
-RUN apt install vim -y -qq --no-install-recommends
+RUN apt-get install vim -y -qq --no-install-recommends
 
 # copy applications
 COPY app/ /usr/src/app/
