@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:18.04
 
 MAINTAINER zrn-ns
 
@@ -20,17 +20,21 @@ VOLUME /agqr-recorder-data/recorded/
 # Install ffmpeg
 RUN apt install ffmpeg -y -qq --no-install-recommends
 
-# Install python
-RUN apt install python3 python3-dev python3-pip python3-setuptools python3-lxml -y -qq --no-install-recommends
+RUN apt install software-properties-common curl -y -qq
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt install python3.9 python3-distutils python3-apt -y -qq --no-install-recommends
+RUN curl https://bootstrap.pypa.io/get-pip.py | python3.9 -
 
-# Setup virtualenv
-RUN pip install --upgrade virtualenv
-RUN virtualenv ~/myenv
-RUN ls -alF ~/myenv/bin/
-RUN . ~/myenv/bin/activate
+RUN python3.9 -V
+RUN pip3 -V
 
 # Install streamlink
-RUN pip3 install --upgrade streamlink
+RUN pip3 install --upgrade setuptools
+#RUN pip3 install --upgrade libxml2-python3 libxml2-devel libxslt
+#RUN pip3 install --upgrade streamlink
+RUN apt install git -y -qq
+RUN git --version
+RUN pip3 install --upgrade git+https://github.com/streamlink/streamlink.git@ea7a243
 
 # Install other tools
 RUN apt install vim -y -qq --no-install-recommends
