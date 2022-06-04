@@ -14,8 +14,8 @@ ENV LANG ja_JP.UTF-8
 VOLUME /agqr-recorder-data/config/
 VOLUME /agqr-recorder-data/recorded/
 
-# https://stackoverflow.com/questions/5178416/libxml-install-error-using-pip
-RUN apt install libxml2-dev libxslt-dev -y -qq --no-install-recommends
+# # https://stackoverflow.com/questions/5178416/libxml-install-error-using-pip
+# RUN apt install libxml2-dev libxslt-dev -y -qq --no-install-recommends
 
 # Install ffmpeg
 RUN apt install ffmpeg -y -qq --no-install-recommends
@@ -23,8 +23,14 @@ RUN apt install ffmpeg -y -qq --no-install-recommends
 # Install python
 RUN apt install python3 python3-dev python3-pip python3-setuptools python3-lxml -y -qq --no-install-recommends
 
+# Setup virtualenv
+RUN pip install --upgrade virtualenv
+RUN virtualenv ~/myenv
+RUN ls -alF ~/myenv/bin/
+RUN . ~/myenv/bin/activate
+
 # Install streamlink
-RUN pip3 install --upgrade pycryptodome streamlink
+RUN pip3 install --upgrade streamlink
 
 # Install other tools
 RUN apt install vim -y -qq --no-install-recommends
