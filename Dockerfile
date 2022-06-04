@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 
 MAINTAINER zrn-ns
 
@@ -13,6 +13,9 @@ ENV LANG ja_JP.UTF-8
 # データディレクトリ
 VOLUME /agqr-recorder-data/config/
 VOLUME /agqr-recorder-data/recorded/
+
+# https://stackoverflow.com/questions/5178416/libxml-install-error-using-pip
+RUN apt-get install libxml2-dev libxml2 libxslt-dev python3-dev -y -qq --no-install-recommends
 
 # Install ffmpeg
 RUN apt-get install ffmpeg -y -qq --no-install-recommends
