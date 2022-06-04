@@ -1,12 +1,8 @@
-FROM ubuntu:18.04
+FROM ubuntu:21.10
 
 MAINTAINER zrn-ns
 
-RUN apt-get update
-
-# add repository(streamlink)
-RUN apt-get install software-properties-common -y -qq --no-install-recommends
-RUN add-apt-repository ppa:nilarimogard/webupd8
+RUN apt update
 
 # 日本語環境化
 RUN apt-get install -y language-pack-ja-base language-pack-ja locales tzdata; \
@@ -21,12 +17,12 @@ VOLUME /agqr-recorder-data/recorded/
 # Install ffmpeg
 RUN apt-get install ffmpeg -y -qq --no-install-recommends
 
-# Install streamlink
-RUN apt-get install streamlink -y -qq --no-install-recommends
-
 # Install python
 RUN apt-get install python3 python3-pip python3-setuptools -y -qq --no-install-recommends
-RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade pip setuptools
+
+# Install streamlink
+RUN pip3 install --upgrade streamlink
 
 # Install other tools
 RUN apt-get install vim -y -qq --no-install-recommends
