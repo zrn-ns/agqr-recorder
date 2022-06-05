@@ -30,8 +30,12 @@ RUN apt-get install vim -y -qq --no-install-recommends
 
 # copy applications
 COPY app/ /usr/src/app/
+RUN chmod -R 755 /usr/src/app
 
 # install Python modules needed by the Python app
 RUN pip3 install --no-cache-dir -r /usr/src/app/requirements.txt
+
+RUN useradd docker
+USER docker
 
 CMD ["/usr/src/app/startup.sh"]
